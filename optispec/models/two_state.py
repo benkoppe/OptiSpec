@@ -24,6 +24,23 @@ class Params(CommonParams):
     mode_basis_sets: jdc.Static[tuple[int, ...]] = (20, 200)
 
 
+def absorption(params: Params) -> Spectrum:
+    diagonalization = diagonalize(params)
+    energies, intensities = _peaks(
+        diagonalization, params.transfer_integral, params.temperature_kelvin
+    )
+
+    sample_points = jnp.linspace(
+        params.start_energy, params.end_energy, params.num_points
+    )
+
+    broadened_spectrum = _broaden_peaks(
+        sample_points, energies, intensities, params.broadening
+    )
+
+    return Spectrum(sample_points, broadened_spectrum)
+
+
 @jdc.jit
 def diagonalize(params: Params) -> h.Diagonalization:
     return h.diagonalize(_hamiltonian_params(params))
@@ -46,14 +63,40 @@ def _hamiltonian_params(params: Params) -> h.Params:
     )
 
 
-# broaden peaks
-
 PeakEnergies = Float[Array, " num_peaks"]  # array of selected peak energies
 PeakIntensities = Float[Array, " num_peaks"]  # array of selected peak intensities
 
 # matrix of all considered transitions
 # first dimension sliced in half because we only consider transitions from ground to excited states
 AllTransitionsMatrix = Float[Array, " matrix_size/2 matrix_size"]
+
+
+def _broaden_peaks(
+    sample_points: Float[Array, " num_points"],
+    energies: PeakEnergies,
+    intensities: PeakIntensities,
+    broadening: jdc.Static[float],
+) -> Float[Array, " num_points"]:
+    return jnp.sum(
+        _apply_gaussians(sample_points, energies, intensities, broadening), axis=0
+    )
+
+
+@jax.jit
+def _apply_gaussian(
+    sample_points: Float[Array, " num_points"],
+    peak_energy: Float[Array, "1"],
+    peak_intensity: Float[Array, "1"],
+    broadening: jdc.Static[float],
+) -> Float[Array, " num_points"]:
+    return (
+        peak_intensity
+        * (1.0 / (jnp.sqrt(jnp.pi) * broadening))
+        * jnp.exp(-jnp.power((sample_points - peak_energy) / broadening, 2))
+    )
+
+
+_apply_gaussians = jax.vmap(_apply_gaussian, in_axes=(None, 0, 0, None))
 
 
 def _peaks(
