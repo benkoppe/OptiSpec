@@ -1,6 +1,10 @@
 from jaxtyping import Float, Array
 
 
+def kelvin_to_wavenumbers(temperature_kelvin: float) -> float:
+    return 0.695028 * temperature_kelvin
+
+
 def outer_sum(*arrays: tuple[Float[Array, "*"]]) -> Float[Array, "*"]:
     """
     Computes the outer sum of multiple JAX arrays.
