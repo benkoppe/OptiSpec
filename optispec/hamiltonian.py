@@ -9,11 +9,11 @@ from optispec.utils import outer_sum
 
 @jdc.pytree_dataclass
 class Params:
-    # dynamic arguments
+    # arguments
     transfer_integrals: float | Float[Array, " (num_states * (num_states - 1)) // 2"]
     state_energies: Float[Array, " num_states"]
 
-    # dynamic mode arguments
+    # mode arguments
     mode_frequencies: Float[Array, " num_modes"]
     mode_state_couplings: Float[Array, " num_states num_modes"]
 
