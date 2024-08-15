@@ -5,7 +5,10 @@ import time
 
 from optispec import hamiltonian as h
 
+# display sample usage of hamiltonian
+
 jax.config.update("jax_platform_name", "gpu")
+# jax.config.update("jax_enable_x64", True)
 
 
 def time_diagonalization():
@@ -24,11 +27,19 @@ def time_diagonalization():
 
     h.diagonalize(p)
 
+    # h.hamiltonian(p)
+
     end = time.time()
 
     return end - start
 
 
-for _ in range(10):
+N = 10
+runtimes = []
+
+for _ in range(N):
     runtime = time_diagonalization()
     print(runtime)
+    runtimes.append(runtime)
+
+print(f"Average runtime: {sum(runtimes[1:]) / N:.2f} seconds")
