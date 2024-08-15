@@ -37,6 +37,7 @@ def diagonalize(params: Params) -> Diagonalization:
     return Diagonalization(eigenvalues=eigenvalues, eigenvectors=eigenvectors)
 
 
+@jdc.jit
 def hamiltonian(params: Params) -> Matrix:
     num_states = _num_states(params)
     transfer_integrals_matrix = _transfer_integrals_matrix(params)
