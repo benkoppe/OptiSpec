@@ -12,6 +12,7 @@ jaxtyping = "^0.2.33"
 jax = "^0.4.31"
 jax-dataclasses = "^1.6.1"
 numpy = "^2.0.1"
+matplotlib = "^3.9.2"
 
 
 [tool.poetry.group.dev.dependencies]
