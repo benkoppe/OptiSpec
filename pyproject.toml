@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "optispec"
+version = "0.1.0"
+description = "Simulate optical spectra with quantum mechanical models."
+authors = ["benkoppe <koppe@arizona.edu>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typeddict-validator = "^0.1.2"
+jaxtyping = "^0.2.33"
+jax = "^0.4.31"
+jax-dataclasses = "^1.6.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.ruff.lint]
+# ignore forward annotation errors, they get in the way of jaxtyping
+ignore = ["F722"]
