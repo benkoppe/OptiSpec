@@ -3,43 +3,35 @@ import jax.numpy as jnp
 import random
 import time
 
-from optispec import hamiltonian as h
+from optispec.models import two_state as ts
 
-# display sample usage of hamiltonian
+# display sample usage of two-state model
 
 jax.config.update("jax_platform_name", "gpu")
 # jax.config.update("jax_enable_x64", True)
 
 
-def time_diagonalization():
-    p = h.Params(
-        transfer_integrals=100,
-        state_energies=jnp.array([0, random.randint(9_000, 15_000)]),
-        mode_basis_sets=(20, 200),
-        mode_localities=[True, True],
-        mode_frequencies=jnp.array([1400, 100]),
-        mode_state_couplings=jnp.array(
-            [[0.0, 0.0], [random.uniform(0.1, 0.9), random.uniform(0.1, 0.9)]]
-        ),
-    )
+def time_function():
+    p = ts.Params(transfer_integral=random.randint(90, 110))
 
     start = time.time()
 
-    h.diagonalize(p)
+    diag = ts.diagonalize(p)
 
-    # h.hamiltonian(p)
+    peaks = ts._peaks(diag, p.transfer_integral, p.temperature_kelvin)
 
     end = time.time()
 
-    return end - start
+    return end - start, peaks
 
 
 N = 10
 runtimes = []
 
 for _ in range(N):
-    runtime = time_diagonalization()
+    runtime, peaks = time_function()
     print(runtime)
+    # print(peaks)
     runtimes.append(runtime)
 
-print(f"Average runtime: {sum(runtimes[1:]) / N:.2f} seconds")
+print(f"Average runtime: {sum(runtimes[1:]) / (N - 1):.2f} seconds")
