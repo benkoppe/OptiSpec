@@ -6,15 +6,6 @@ from optispec import hamiltonian as h
 
 
 @pytest.fixture
-def hamiltonian():
-    return {"key": "value"}
-
-
-def test_functionality(hamiltonian):
-    assert hamiltonian["key"] == "value"
-
-
-@pytest.fixture
 def mode_filled_block():
     mode_frequencies = jnp.array([100, 1200])
     mode_couplings = jnp.array([0.7, 1.6])
