@@ -4,6 +4,9 @@ from functools import partial
 
 from optispec import hamiltonian as h
 
+# functions for testing block-building functions of hamiltonian
+# compares blocks against block built by hand (see fixtures below)
+
 
 @pytest.fixture
 def mode_filled_block():
