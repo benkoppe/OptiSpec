@@ -115,6 +115,23 @@ def test_local_block_creation(local_filled_block):
     assert jnp.allclose(block, local_filled_block["block"])
 
 
+def test_local_block_localities(local_filled_block):
+    params = h.Params(
+        transfer_integrals=0,
+        state_energies=jnp.array([local_filled_block["state_energy"]]),
+        mode_basis_sets=local_filled_block["basis_set"],
+        mode_localities=(True, False),
+        mode_frequencies=local_filled_block["mode_frequencies"],
+        mode_state_couplings=jnp.array([local_filled_block["mode_couplings"]]),
+    )
+
+    block = h._local_block(0, params)
+
+    expected_block = set_first_off_diagonal_to_zero(local_filled_block["block"])
+
+    assert jnp.allclose(block, expected_block)
+
+
 def test_non_local_block_creation(mode_filled_block):
     transfer_integral = 100.0
 
@@ -133,8 +150,33 @@ def test_non_local_block_creation(mode_filled_block):
         jnp.repeat(transfer_integral, jnp.prod(jnp.array(params.mode_basis_sets)))
     )
 
-    print("p", mode_filled_block["block"])
-    print("b", block)
-    print("e", expected_block)
+    assert jnp.allclose(block, expected_block)
+
+
+def test_non_local_block_creation_localities(mode_filled_block):
+    transfer_integral = 100.0
+
+    params = h.Params(
+        transfer_integrals=transfer_integral,
+        state_energies=jnp.array([0]),
+        mode_basis_sets=(3, 3),
+        mode_localities=[False, True],
+        mode_frequencies=mode_filled_block["mode_frequencies"],
+        mode_state_couplings=jnp.array([mode_filled_block["mode_couplings"]]),
+    )
+
+    block = h._non_local_block(0, transfer_integral, params)
+
+    expected_block = mode_filled_block["block"] + jnp.diag(
+        jnp.repeat(transfer_integral, jnp.prod(jnp.array(params.mode_basis_sets)))
+    )
+
+    expected_block = set_first_off_diagonal_to_zero(expected_block)
 
     assert jnp.allclose(block, expected_block)
+
+
+def set_first_off_diagonal_to_zero(matrix):
+    n = matrix.shape[0]
+    mask = jnp.eye(n, k=1) + jnp.eye(n, k=-1)
+    return jnp.where(mask == 1, 0.0, matrix)
