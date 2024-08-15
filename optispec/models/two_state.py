@@ -1,8 +1,10 @@
 from jaxtyping import Array, Float, Int
+import jax_dataclasses as jdc
 
 from optispec.models.base import CommonParams, Spectrum
 
 
+@jdc.pytree_dataclass
 class Params(CommonParams):
     broadening: float
     temperature_kelvin: float
@@ -15,5 +17,5 @@ class Params(CommonParams):
     mode_couplings: Float[Array, "num_modes"]
 
 
-def run(params: Params) -> Spectrum:
+def absorption(params: Params) -> Spectrum:
     pass
