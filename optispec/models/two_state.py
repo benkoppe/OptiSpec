@@ -1,4 +1,4 @@
-from jaxtyping import Array, Float, Int
+from jaxtyping import Array, Float
 import jax_dataclasses as jdc
 import jax.numpy as jnp
 import jax
@@ -17,8 +17,12 @@ class Params(CommonParams):
     energy_gap: float = 8_000.0
 
     # mode arguments
-    mode_frequencies: Float[Array, "num_modes"] = jnp.array([1200.0, 100.0])
-    mode_couplings: Float[Array, "num_modes"] = jnp.array([0.7, 2.0])
+    mode_frequencies: Float[Array, " num_modes"] = jdc.field(
+        default_factory=lambda: jnp.array([1200.0, 100.0])
+    )
+    mode_couplings: Float[Array, " num_modes"] = jdc.field(
+        default_factory=lambda: jnp.array([0.7, 2.0])
+    )
 
     # static mode arguments
     mode_basis_sets: jdc.Static[tuple[int, ...]] = (20, 200)
