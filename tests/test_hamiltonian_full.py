@@ -5,7 +5,6 @@ from optispec import hamiltonian as h
 from tests.data import (
     OLD_PACKAGE_MATRIX,
     OLD_PACKAGE_EIGENVALUES,
-    OLD_PACKAGE_EIGENVECTORS,
 )
 
 # functions for testing the full matrix building and diagonalization
