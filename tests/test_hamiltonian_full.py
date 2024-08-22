@@ -2,10 +2,9 @@ import pytest
 import jax.numpy as jnp
 
 from optispec import hamiltonian as h
-from tests.data import (
+from tests.data.hamiltonian import (
     OLD_PACKAGE_MATRIX,
     OLD_PACKAGE_EIGENVALUES,
-    OLD_PACKAGE_EIGENVECTORS,
 )
 
 # functions for testing the full matrix building and diagonalization
