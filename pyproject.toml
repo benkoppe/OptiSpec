@@ -17,6 +17,7 @@ matplotlib = "^3.9.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.2"
+black = "^24.8.0"
 
 [build-system]
 requires = ["poetry-core"]
