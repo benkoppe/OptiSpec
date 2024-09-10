@@ -9,3 +9,5 @@ load_csv = partial(
 )
 
 OLD_PACKAGE_ABSORPTION = load_csv("absorption-intensities")
+
+FORTRAN_CODE_ABSORPTION = load_csv("absorption-intensities-fortran")
