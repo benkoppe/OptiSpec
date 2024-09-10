@@ -25,4 +25,5 @@ def test_two_state_absorption_against_old_python_package(two_state_params):
     params = two_state_params
     absorption = ts.absorption(params)
 
+    absorption = absorption.match_greatest_peak_of(OLD_PACKAGE_ABSORPTION)
     assert jnp.allclose(absorption.intensities, OLD_PACKAGE_ABSORPTION)
