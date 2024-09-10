@@ -1,10 +1,10 @@
-from jaxtyping import Array, Float
-import jax_dataclasses as jdc
-import jax.numpy as jnp
 import jax
+import jax.numpy as jnp
+import jax_dataclasses as jdc
+from jaxtyping import Array, Float
 
-from optispec.models.base import CommonParams, Spectrum
 from optispec import hamiltonian as h
+from optispec.models.base import CommonParams, Spectrum
 from optispec.utils import kelvin_to_wavenumbers
 
 
