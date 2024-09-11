@@ -25,12 +25,13 @@ def test_two_state_absorption_against_old_python_package(two_state_params):
     params = two_state_params
     absorption = ts.absorption(params)
 
-    absorption = absorption.match_greatest_peak_of(OLD_PACKAGE_ABSORPTION)
-    assert jnp.allclose(absorption.intensities, OLD_PACKAGE_ABSORPTION)
+    absorption = absorption.match_greatest_peak_of(OLD_PACKAGE_ABSORPTION.intensities)
+    assert absorption.assert_similarity(OLD_PACKAGE_ABSORPTION)
+
 
 def test_two_state_absorption_against_fortran_code(two_state_params):
     params = two_state_params
     absorption = ts.absorption(params)
 
-    absorption = absorption.match_greatest_peak_of(FORTRAN_CODE_ABSORPTION)
-    assert jnp.allclose(absorption.intensities, FORTRAN_CODE_ABSORPTION, atol=1e-6)
+    absorption = absorption.match_greatest_peak_of(FORTRAN_CODE_ABSORPTION.intensities)
+    assert absorption.assert_similarity(FORTRAN_CODE_ABSORPTION, atol=1e-6)
