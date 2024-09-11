@@ -19,7 +19,14 @@ class Spectrum:
         return jnp.array_equal(self.energies, other.energies).item()
 
     def intensities_similar(self, other: "Spectrum", rtol=1e-05, atol=1e-08) -> bool:
-        return jnp.allclose(self.intensities, other.intensities, rtol=rtol, atol=atol).item()
+        return jnp.allclose(
+            self.intensities, other.intensities, rtol=rtol, atol=atol
+        ).item()
+
+    def assert_similarity(self, other: "Spectrum", rtol=1e-05, atol=1e-08) -> bool:
+        return self.energies_equal(other) and self.intensities_similar(
+            other, rtol=rtol, atol=atol
+        )
 
     def __mul__(self, other: Float) -> "Spectrum":
         return Spectrum(self.energies, self.intensities * other)
