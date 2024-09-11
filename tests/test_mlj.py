@@ -14,5 +14,5 @@ def test_mlj_absorption_against_old_python_package(mlj_params):
     params = mlj_params
     absorption = mlj.absorption(params)
 
-    absorption = absorption.match_greaetest_peak_of(OLD_PACKAGE_ABSORPTION)
-    return jnp.allclose(absorption.intensities, OLD_PACKAGE_ABSORPTION)
+    absorption = absorption.match_greatest_peak_of(OLD_PACKAGE_ABSORPTION)
+    assert jnp.allclose(absorption.intensities, OLD_PACKAGE_ABSORPTION)
