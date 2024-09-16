@@ -1,6 +1,6 @@
-import pytest
 import jax.numpy as jnp
-from functools import partial
+import pytest
+from jaxtyping import Array, Float
 
 from optispec import hamiltonian as h
 
@@ -15,16 +15,19 @@ def mode_filled_block():
     basis_set = (3, 3)
 
     # functions to get values for each mode
-    m1 = partial(
-        h._mode_offdiagonal_element,
-        coupling=mode_couplings[0].astype(float),
-        frequency=mode_frequencies[0].astype(float),
-    )
-    m2 = partial(
-        h._mode_offdiagonal_element,
-        coupling=mode_couplings[1].astype(float),
-        frequency=mode_frequencies[1].astype(float),
-    )
+    def m1(index: int):
+        return h._mode_offdiagonal_element(
+            component_index=jnp.array([index]),
+            coupling=mode_couplings[0].astype(float),
+            frequency=mode_frequencies[0].astype(float),
+        ).item()
+
+    def m2(index: int):
+        return h._mode_offdiagonal_element(
+            component_index=jnp.array([index]),
+            coupling=mode_couplings[1].astype(float),
+            frequency=mode_frequencies[1].astype(float),
+        ).item()
 
     expected_block = jnp.array(
         [
@@ -57,16 +60,16 @@ def local_filled_block(mode_filled_block):
     # function to get each diagonal value
     def d(m1_idx: int, m2_idx: int) -> float:
         m1_component = h._mode_diagonal_component(
-            m1_idx,
+            jnp.array([m1_idx]),
             mode_frequencies[0],
             mode_couplings[0],
         )
         m2_component = h._mode_diagonal_component(
-            m2_idx,
+            jnp.array([m2_idx]),
             mode_frequencies[1],
             mode_couplings[1],
         )
-        return state_energy + m1_component + m2_component
+        return (state_energy + m1_component + m2_component).item()
 
     expected_diagonals = jnp.array(
         [
@@ -142,12 +145,12 @@ def test_non_local_block_creation(mode_filled_block):
         transfer_integrals=transfer_integral,
         state_energies=jnp.array([0]),
         mode_basis_sets=(3, 3),
-        mode_localities=[False, False],
+        mode_localities=(False, False),
         mode_frequencies=mode_filled_block["mode_frequencies"],
         mode_state_couplings=jnp.array([mode_filled_block["mode_couplings"]]),
     )
 
-    block = h._non_local_block(0, transfer_integral, params)
+    block = h._non_local_block(0, jnp.array([transfer_integral]), params)
 
     expected_block = mode_filled_block["block"] + jnp.diag(
         jnp.repeat(transfer_integral, jnp.prod(jnp.array(params.mode_basis_sets)))
@@ -163,12 +166,12 @@ def test_non_local_block_creation_localities(mode_filled_block):
         transfer_integrals=transfer_integral,
         state_energies=jnp.array([0]),
         mode_basis_sets=(3, 3),
-        mode_localities=[False, True],
+        mode_localities=(False, True),
         mode_frequencies=mode_filled_block["mode_frequencies"],
         mode_state_couplings=jnp.array([mode_filled_block["mode_couplings"]]),
     )
 
-    block = h._non_local_block(0, transfer_integral, params)
+    block = h._non_local_block(0, jnp.array([transfer_integral]), params)
 
     expected_block = mode_filled_block["block"] + jnp.diag(
         jnp.repeat(transfer_integral, jnp.prod(jnp.array(params.mode_basis_sets)))
@@ -179,7 +182,7 @@ def test_non_local_block_creation_localities(mode_filled_block):
     assert jnp.allclose(block, expected_block)
 
 
-def set_first_off_diagonal_to_zero(matrix):
+def set_first_off_diagonal_to_zero(matrix) -> Float[Array, " matrix_size"]:
     n = matrix.shape[0]
     mask = jnp.eye(n, k=1) + jnp.eye(n, k=-1)
-    return jnp.where(mask == 1, 0.0, matrix)
+    return jnp.where(mask == 1, 0.0, matrix)  # pyright: ignore
