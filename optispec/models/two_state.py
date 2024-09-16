@@ -13,8 +13,8 @@ class Params(CommonParams):
     temperature_kelvin: jdc.Static[float] = 300.0
     broadening: float = 200.0
 
-    transfer_integral: float = 100.0
     energy_gap: float = 8_000.0
+    coupling: float = 100.0
 
     # mode arguments
     mode_frequencies: Float[Array, " num_modes"] = jdc.field(
@@ -31,7 +31,7 @@ class Params(CommonParams):
 def absorption(params: Params) -> Spectrum:
     diagonalization = diagonalize(params)
     energies, intensities = _peaks(
-        diagonalization, params.transfer_integral, params.temperature_kelvin
+        diagonalization, params.coupling, params.temperature_kelvin
     )
 
     sample_points = jnp.linspace(
@@ -58,7 +58,7 @@ def hamiltonian(params: Params) -> h.Matrix:
 @jdc.jit
 def _hamiltonian_params(params: Params) -> h.Params:
     return h.Params(
-        transfer_integrals=params.transfer_integral,
+        transfer_integrals=params.coupling,
         state_energies=jnp.array([0.0, params.energy_gap]),
         mode_basis_sets=params.mode_basis_sets,
         mode_localities=(True, True),
@@ -105,11 +105,11 @@ _apply_gaussians = jax.vmap(_apply_gaussian, in_axes=(None, 0, 0, None))
 
 def _peaks(
     diagonalization: h.Diagonalization,
-    transfer_integral: float,
+    coupling: float,
     temperature_kelvin: jdc.Static[float],
 ) -> tuple[PeakEnergies, PeakIntensities]:
     energies = _peak_energies(diagonalization)
-    intensities = _peak_intensities(diagonalization, transfer_integral)
+    intensities = _peak_intensities(diagonalization, coupling)
 
     temperature_wavenumbers = kelvin_to_wavenumbers(temperature_kelvin)
 
@@ -150,7 +150,7 @@ def _peak_energies(
 
 @jdc.jit
 def _peak_intensities(
-    diagonalization: h.Diagonalization, transfer_integral: float
+    diagonalization: h.Diagonalization, coupling: float
 ) -> AllTransitionsMatrix:
     # index [i,j] represents intensity of transition from i to j
 
@@ -159,7 +159,7 @@ def _peak_intensities(
 
     vector_slices_1 = eigenvectors[:half_size, :]
     vector_slices_2 = jax.lax.cond(
-        (transfer_integral == 0.0),
+        (coupling == 0.0),
         lambda: eigenvectors[half_size:, :],
         lambda: vector_slices_1,
     )

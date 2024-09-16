@@ -26,7 +26,7 @@ def time_absorption():
 
 def time_matrix():
     p = ts.Params(
-        transfer_integral=random.randint(90, 110),
+        coupling=random.randint(90, 110),
         temperature_kelvin=random.choice([0.0, 300.0]),
     )
 

@@ -13,7 +13,7 @@ def two_state_params():
         num_points=2_001,
         temperature_kelvin=300.0,
         broadening=200.0,
-        transfer_integral=100.0,
+        coupling=100.0,
         energy_gap=8_000.0,
         mode_basis_sets=(20, 50),
         mode_frequencies=jnp.array([1200.0, 100.0]),
