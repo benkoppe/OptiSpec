@@ -933,17 +933,6 @@ files = [
 ]
 
 [[package]]
-name = "typeddict-validator"
-version = "0.1.2"
-description = ""
-optional = false
-python-versions = "*"
-files = [
-    {file = "typeddict-validator-0.1.2.tar.gz", hash = "sha256:2d5daab8b54cdd770f5c3b168c4efcef541b8e85e8b426cf72ab1566c6803a22"},
-    {file = "typeddict_validator-0.1.2-py3-none-any.whl", hash = "sha256:1613247ce8edfaf0a105ab80111dbb5d8ca12913e0e63ba73d82d6fa573bf29d"},
-]
-
-[[package]]
 name = "typeguard"
 version = "2.13.3"
 description = "Run-time type checker for Python"
@@ -972,4 +961,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "8bdb61193a0bdaa6055f056ef1e6d1cfb81b1f23313a01954fb2943122cb61e7"
+content-hash = "f152310d302df1774919f4558080242698b32987a57d699053bf7ebf7b2ce035"
