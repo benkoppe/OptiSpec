@@ -50,9 +50,9 @@ After completing installation, create a Python script or start the REPL in the t
 
 5. `Spectrum` 
 
-This output object includes useful parameters and methods to interact with the computed absorption spectrum. This includes:
-
-TODO: Spectrum parameters/methods
+    This output object includes useful parameters and methods to interact with the computed absorption spectrum. This includes:
+    
+    TODO: Spectrum parameters/methods
 
 
 ## Models
