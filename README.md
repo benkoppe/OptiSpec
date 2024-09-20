@@ -187,11 +187,69 @@ This will return a [Spectrum](#spectrum) object.
 
 ## Spectrum
 
-TODO
+`Spectrum` objects are returned from all absorption spectrum computations. It is a `dataclass` with the following attributes:
+
+```python
+spectrum.energies # JAX array
+spectrum.intensities # JAX array
+```
+
+To convert a JAX array to a `numpy` array, wrap with `np.array`: as in, `np_energies = np.array(spectrum.energies)`.
+
+To see a summary of the most useful methods in `Spectrum`, see [Usage](#usage). In total, however, `Spectrum` objects contain the following methods:
+
+```python
+spectrum.plot(show: bool = True, ax: Optional[Axes] = None) # plot the spectrum on given axes (or plt.gca() if unprovided) and show afterwards
+spectrum.save_plot(file_path: str) # plot the spectrum and save to file_path
+spectrum.save_data(file_path: str) # save the spectrum's data to a file_path
+spectrum.energies_equal(other: Spectrum) # ensure energies match other spectrum
+spectrum.intensities_similar(other: Spectrum, rtol: float = 1e-05, atol: float = 1e-08) # ensure intensities match other spectrum with given relative and absolute tolerance
+spectrum.assert_similarity(other: Spectrum, rtol: float = 1e-05, atol: float = 1e-08) # combines both `energies_equal` and `intensities_similar`
+spectrum.__mul__(other: float) # allows multiplying intensities by a scalar
+spectrum.match_greatest_peak_of(other_intensities: Float[Array, "num_points"]) # returns a new spectrum where intensity maximum matches given array
+```
 
 ## Hamiltonian
 
-TODO
+To make the quantum mechanical models possible, OptiSpec also implements a general `Hamiltonian` model. This model supports arbitrary electronic states and vibrational modes.
+
+To import the hamiltonian model, call:
+
+```python
+from optispec import hamiltonian
+```
+
+From there, a `Params` dataclass can be initialized in the same way as the models:
+
+```python
+import jax.numpy as jnp
+
+example_params = hamiltonian.Params(
+    transfer_integrals = 0.0, # single float to apply to all states, or an array for each combination of states
+    state_energies = jnp.array([]), # energy of each energetic state
+    mode_frequencies = jnp.array([]), # frequency of each vibrational mode
+    mode_state_couplings = jnp.array([]), # coupling between all states and modes -- rows are states, columns are modes
+    mode_basis_sets = (20, 200), # basis set for each vibrational mode
+    mode_localities = (True, True), # locality of each state
+)
+```
+
+> [!NOTE]
+> Unlike models, default values are *not* provided.
+
+From there, a matrix can be constructed and/or diagonalized with the following methods:
+
+```python
+diagonalization = hamiltonian.diagonalize(example_params)
+matrix = hamiltonian.hamiltonian(example_params)
+```
+
+`matrix` is simply a large 2d JAX array, while `diagonalization` is a `Diagonalization` NamedTuple with two attributes:
+
+```python
+diagonalization.eigenvalues # 1d JAX array
+diagonalization.eigenvectors # 2d JAX array
+```
 
 ## Troubleshooting
 
