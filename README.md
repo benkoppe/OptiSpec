@@ -2,7 +2,7 @@
 
 Optispec is a Python package that simulates molecular absorption spectra. Currently, OptiSpec implements the following models:
 
-- **[Two-State Vibronic Hamiltonian](#two-state)**: smaller quantum mechanical model
+- **[Two-State Vibronic Hamiltonian](#two-state)**: quantum mechanical model with ground and charge-transfer states
 - **[Marcus–Levich–Jortner (MLJ)](#mlj)**: so-called 'semiclassical' computation
 - **Three-State Vibronic Hamiltonian**: *work in progress (see branch)*
 
