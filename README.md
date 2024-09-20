@@ -19,6 +19,8 @@ After completing installation, create a Python script or start the REPL in the t
     ```zsh
     python <path-to-file>
     ```
+
+    To start the REPL, don't include a file path in the terminal call.
     
 > [!NOTE]
 > If `python` doesn't work on your machine, try `python3`.
