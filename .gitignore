@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,macos,windows,linux,vim,pycharm
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode,macos,windows,linux,vim,pycharm
 
+# Ignore FORTRAN code
+*.f90
+
 ### Linux ###
 *~
 
