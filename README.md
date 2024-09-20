@@ -8,7 +8,7 @@ Optispec is a Python package that simulates molecular absorption spectra. Curren
 
 A general [Hamiltonian](#hamiltonian) model is also provided that is used under-the-hood by the quantum-mechanical models.
 
-**Table of Contents:**
+## Table of Contents
 
 1. [Installation](#installation) from PyPI
 2. [Usage](#usage) after installation
