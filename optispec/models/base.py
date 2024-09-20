@@ -1,6 +1,12 @@
+from typing import Optional
+
 import jax.numpy as jnp
 import jax_dataclasses as jdc
+import matplotlib.pyplot as plt
 from jaxtyping import Array, Float
+from matplotlib.axes import Axes
+from matplotlib.lines import Line2D
+import numpy as np
 
 
 @jdc.pytree_dataclass
@@ -14,6 +20,27 @@ class CommonParams:
 class Spectrum:
     energies: Float[Array, " num_points"]
     intensities: Float[Array, " num_points"]
+
+    def plot(self, show: bool = True, ax: Optional[Axes] = None) -> Line2D:
+        if ax is None:
+            ax = plt.gca()
+        line = ax.plot(self.energies, self.intensities)[0]
+        if show:
+            plt.show()
+        return line
+
+    def save_plot(self, file_path: str):
+        plt.clf()
+        self.plot(show=False)
+        plt.savefig(file_path)
+
+    def save_data(self, file_path: str):
+        np.savetxt(
+            file_path,
+            jnp.column_stack((self.energies, self.intensities)),
+            delimiter=",",
+            header="energies,intensities",
+        )
 
     def energies_equal(self, other: "Spectrum") -> bool:
         return jnp.array_equal(self.energies, other.energies).item()
