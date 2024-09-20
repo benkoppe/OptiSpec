@@ -6,6 +6,17 @@ Optispec is a Python package that simulates molecular absorption spectra. Curren
 - **[Marcus–Levich–Jortner (MLJ)](#mlj)**: so-called 'semiclassical' computation
 - **Three-State Vibronic Hamiltonian**: *work in progress (see branch)*
 
+A general [Hamiltonian](#hamiltonian) model is also provided that is used under-the-hood by the quantum-mechanical models.
+
+**Table of Contents:**
+
+1. [Installation](#installation) from PyPI
+2. [Usage](#usage) after installation
+3. Description of base [Models](#models)
+4. [Spectrum](#spectrum) model return object
+5. Description of underlying [Hamiltonian](#hamiltonian)
+6. Common [Troubleshooting](#troubleshooting)
+
 ## Installation
 
 TODO
@@ -53,10 +64,10 @@ After completing installation, create a Python script or start the REPL in the t
     )
     ```
 
-    For more information about each model's `Params`, see the [MODELS] section.
+    For more information about each model's `Params`, see the [Models](#models) section.
 
 > [!CAUTION]
-> Please be careful about types! Note in the example that `float` variables always have a decimal, arrays are always `jax.numpy.array` arrays, and tuples are wrapped in `()`. See the [MODELS] section for more detail.
+> Please be careful about types! Note in the example that `float` variables always have a decimal, arrays are always `jax.numpy.array` arrays, and tuples are wrapped in `()`. See the [Models](#models) section for more detail.
 
 5. Finally, transform the `Params` instance into a output `Spectrum` instance with `model.absorption()`:
 
@@ -80,6 +91,8 @@ After completing installation, create a Python script or start the REPL in the t
     s.energies # JAX array of the energies
     s.intensities # JAX array of the intensities
     ```
+
+    For more detail, see the [Spectrum](#spectrum) section.
 
 
 ## Models
@@ -127,7 +140,7 @@ To transform parameters to an absorption spectrum, call `two_state.absorption(pa
 spectrum = two_state.absorption(default_params)
 ```
 
-This will return a [SPECTRUM] object.
+This will return a [Spectrum](#spectrum) object.
 
 ### MLJ
 
@@ -170,7 +183,7 @@ To transform parameters to an absorption spectrum, call `mlj.absorption(params)`
 spectrum = mlj.absorption(default_params)
 ```
 
-This will return a [SPECTRUM] object.
+This will return a [Spectrum](#spectrum) object.
 
 ## Spectrum
 
