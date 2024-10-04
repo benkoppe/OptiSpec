@@ -27,23 +27,23 @@ After completing installation, create a Python script or start the REPL in the t
 
 1. The call to run a script or start the REPL from the terminal is simply:
 
+> [!NOTE]
+> If `python` doesn't work on your machine, try `python3`.
+
     ```zsh
     python <path-to-file>
     ```
 
     To start the REPL, don't include a file path in the terminal call.
-    
-> [!NOTE]
-> If `python` doesn't work on your machine, try `python3`.
 
-2. From there, import a model. Models are located in `optispec.models`:
+3. From there, import a model. Models are located in `optispec.models`:
 
     ```python
     from optispec.models import two_state
     from optispec.models import mlj
     ```
 
-3. To use a model, set parameters with an instance of the model's `Params` class:
+4. To use a model, set parameters with an instance of the model's `Params` class:
 
     ```python
     import jax.numpy as jnp
@@ -109,6 +109,14 @@ from optispec.models import two_state
 
 A `Params` instance has these parameters and defaults (will use if not provided):
 
+> [!CAUTION]
+> Ensure types:
+> 
+> - **`float`**: `start_energy`, `end_energy`, `temperature_kelvin`, `broadening`, `energy_gap`, and `coupling`
+> - **`int`**: `num_points`
+> - **JAX Array `jax.numpy.array()`**: `mode_frequencies` and `mode_couplings`
+> - **`tuple`**: `mode_basis_sets`
+
 ```python
 import jax.numpy as jnp
 
@@ -125,14 +133,6 @@ default_params = two_state.Params(
     mode_basis_sets = (20, 200) # basis set per mode
 )
 ```
-
-> [!CAUTION]
-> Ensure types:
-> 
-> - **`float`**: `start_energy`, `end_energy`, `temperature_kelvin`, `broadening`, `energy_gap`, and `coupling`
-> - **`int`**: `num_points`
-> - **JAX Array `jax.numpy.array()`**: `mode_frequencies` and `mode_couplings`
-> - **`tuple`**: `mode_basis_sets`
 
 To transform parameters to an absorption spectrum, call `two_state.absorption(params)`:
 
@@ -154,6 +154,13 @@ from optispec.models import mlj
 
 A `Params` instance has these parameters and defaults (will use if not provided):
 
+> [!CAUTION]
+> Ensure types:
+> 
+> - **`float`**: `start_energy`, `end_energy`, `temperature_kelvin`, `energy_gap`, and `disorder_meV`
+> - **`int`**: `num_points` and `basis_size`
+> - **JAX Array `jax.numpy.array()`**: `mode_frequencies` and `mode_couplings`
+
 ```python
 import jax.numpy as jnp
 
@@ -169,13 +176,6 @@ default_params = mlj.Params(
     mode_couplings = jnp.array([0.7, 2.0]), # couplings per mode (expects 2 modes)
 )
 ```
-
-> [!CAUTION]
-> Ensure types:
-> 
-> - **`float`**: `start_energy`, `end_energy`, `temperature_kelvin`, `energy_gap`, and `disorder_meV`
-> - **`int`**: `num_points` and `basis_size`
-> - **JAX Array `jax.numpy.array()`**: `mode_frequencies` and `mode_couplings`
 
 To transform parameters to an absorption spectrum, call `mlj.absorption(params)`:
 
