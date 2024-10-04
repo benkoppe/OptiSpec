@@ -5,6 +5,7 @@ Optispec is a Python package that simulates molecular absorption spectra. Curren
 - **[Two-State Vibronic Hamiltonian](#two-state)**: quantum mechanical model with ground and charge-transfer states
 - **[Marcus–Levich–Jortner (MLJ)](#mlj)**: so-called 'semiclassical' computation
 - **Three-State Vibronic Hamiltonian**: *work in progress (see branch)*
+- **[Stark Effect](#stark)**: computes the electric field effects on any other model
 
 A general [Hamiltonian](#hamiltonian) model is also provided that is used under-the-hood by the quantum-mechanical models.
 
@@ -27,16 +28,16 @@ After completing installation, create a Python script or start the REPL in the t
 
 1. The call to run a script or start the REPL from the terminal is simply:
 
-> [!NOTE]
-> If `python` doesn't work on your machine, try `python3`.
-
     ```zsh
     python <path-to-file>
     ```
 
     To start the REPL, don't include a file path in the terminal call.
 
-3. From there, import a model. Models are located in `optispec.models`:
+> [!NOTE]
+> If `python` doesn't work on your machine, try `python3`.
+
+3. From there, either in your script or directly in the REPL, import a model. Models are located in `optispec.models`:
 
     ```python
     from optispec.models import two_state
@@ -50,7 +51,7 @@ After completing installation, create a Python script or start the REPL in the t
     
     default_params = two_state.Params()
     
-    all_set_params = two_state.Params(
+    manually_specified_params = two_state.Params(
         start_energy = 0.0,
         end_energy = 20_000.0,
         num_points = 2_001,
@@ -181,6 +182,48 @@ To transform parameters to an absorption spectrum, call `mlj.absorption(params)`
 
 ```python
 spectrum = mlj.absorption(default_params)
+```
+
+This will return a [Spectrum](#spectrum) object.
+
+### Stark
+
+The stark effect model applies a positive and negative electric field to a given model's parameters, averages them at a specified contribution ratio, and takes the difference between their average and the model's neutral (no field) output.
+
+To import this model, call:
+
+```python
+from optispec.models import stark, two_state # rather than two_state, import whichever additional model you need
+```
+
+A `Params` instance has these parameters and defaults (will use if not provided):
+
+> [!CAUTION]
+> Ensure types:
+> 
+> - **`float`**: `field_strength`, `positive_field_contribution_ratio`, `field_delta_dipole`, and `field_delta_polarizability`
+> - **`optispec.model`**: `model`
+> - **`optispec.model.Params`**: `neutral_params`
+
+```python
+import jax.numpy as jnp
+
+default_params = stark.Params(
+    model = two_state, # model to be used
+    neutral_params = two_state.Params(
+        ... # neutral model parameters (no electric field)
+    ),
+    field_strength = 0.01, # positive strength of the electric field
+    positive_field_contribution_ratio = 0.5, # ratio of positive field's contribution, always sums with negative ratio to 1
+    field_delta_dipole = 38.0, # electric field's change in dipole moment
+    field_delta_polarizability = 1000.0, # electric field's change in polarizability
+)
+```
+
+To transform parameters to an absorption spectrum, call `stark.absorption(params)`:
+
+```python
+spectrum = stark.absorption(default_params)
 ```
 
 This will return a [Spectrum](#spectrum) object.
