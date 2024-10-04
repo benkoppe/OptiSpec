@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "optispec"
-version = "0.1.0"
+version = "0.1.1"
 description = "Simulate optical spectra with quantum mechanical models."
 authors = ["benkoppe <koppe@arizona.edu>"]
 readme = "README.md"
