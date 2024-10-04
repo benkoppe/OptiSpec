@@ -27,6 +27,9 @@ class Params(CommonParams):
         default_factory=lambda: jnp.array([0.7, 2.0])
     )
 
+    def apply_electric_field(self, field_energy_change: float) -> "Params":
+        return jdc.replace(self, energy_gap=self.energy_gap + field_energy_change)
+
 
 def absorption(params: Params) -> Spectrum:
     sorted_freq_indices = jnp.argsort(params.mode_frequencies)

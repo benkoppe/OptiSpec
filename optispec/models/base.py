@@ -1,19 +1,27 @@
+from abc import ABC, abstractmethod
 from typing import Optional
 
 import jax.numpy as jnp
 import jax_dataclasses as jdc
 import matplotlib.pyplot as plt
+import numpy as np
 from jaxtyping import Array, Float
 from matplotlib.axes import Axes
 from matplotlib.lines import Line2D
-import numpy as np
 
 
 @jdc.pytree_dataclass
-class CommonParams:
+class CommonParams(ABC):
     start_energy: jdc.Static[float] = 0.0
     end_energy: jdc.Static[float] = 20_000.0
     num_points: jdc.Static[int] = 2_001
+
+    @abstractmethod
+    def apply_electric_field(
+        self,
+        field_energy_change: float,
+    ):
+        raise NotImplementedError
 
 
 @jdc.pytree_dataclass

@@ -27,6 +27,9 @@ class Params(CommonParams):
     # static mode arguments
     mode_basis_sets: jdc.Static[tuple[int, ...]] = (20, 200)
 
+    def apply_electric_field(self, field_energy_change: float):
+        return jdc.replace(self, energy_gap=self.energy_gap + field_energy_change)
+
 
 def absorption(params: Params) -> Spectrum:
     diagonalization = diagonalize(params)
