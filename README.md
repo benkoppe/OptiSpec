@@ -20,7 +20,51 @@ A general [Hamiltonian](#hamiltonian) model is also provided that is used under-
 
 ## Installation
 
-TODO
+1. Install Python
+
+   If you don’t have Python installed, you can download it from the official website: https://www.python.org/downloads/
+
+> [!NOTE]
+> Some Python distributions use `python3` instead of `python`.
+>
+> If you are using a distribution that uses `python3`, you should replace `python` with `python3` in all commands.
+>
+> Similarly, `pip3` may need to be used instead of `pip`.
+
+2. Create a directory
+
+   Create a directory to hold your OptiSpec installation. Run the following commands in a folder of your choice:
+
+   ```zsh
+   mkdir optispec # create a directory of any name
+   cd optispec # move to the new directory
+   ```
+
+3. Create a virtual environment
+
+   Inside the new directory, create a virtual environment with the following command:
+
+   ```zsh
+   python -m venv .venv
+   ```
+
+   This will create a new directory `.venv` that contains the virtual environment. Then, activate the environment with:
+
+   ```zsh
+   source .venv/bin/activate
+   ```
+
+   This will activate the virtual environment. **In future terminal sessions, you will need to re-run this command.**
+
+4. Install from `pip`
+
+   Finally, install OptiSpec into your venv with:
+
+   ```zsh
+   pip install optispec
+   ```
+
+   This will install the package and all dependencies.
 
 ## Usage
 
