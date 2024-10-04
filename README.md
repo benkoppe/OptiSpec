@@ -16,7 +16,8 @@ A general [Hamiltonian](#hamiltonian) model is also provided that is used under-
 3. Description of base [Models](#models)
 4. [Spectrum](#spectrum) model return object
 5. Description of underlying [Hamiltonian](#hamiltonian)
-6. Common [Troubleshooting](#troubleshooting)
+6. How to enable [GPU computation](#gpu-computation)
+7. Common [Troubleshooting](#troubleshooting)
 
 ## Installation
 
@@ -337,6 +338,21 @@ matrix = hamiltonian.hamiltonian(example_params)
 diagonalization.eigenvalues # 1d JAX array
 diagonalization.eigenvectors # 2d JAX array
 ```
+
+## GPU Computation
+
+Because this package uses JAX, it comes with a capability for computation on a GPU baked in, which can bring massive speedups. With the virtual environment sourced and a GPU on-machine, you can start using JAX on the GPU with the following terminal command:
+
+```zsh
+pip install -U "jax[cuda12]"
+```
+
+This will install the JAX builds necessary to enable to GPU. To switch back to the CPU-only build, run:
+
+```zsh
+pip install -U jax
+```
+
 
 ## Troubleshooting
 
