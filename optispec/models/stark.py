@@ -13,7 +13,7 @@ P = TypeVar("P", bound=CommonParams)
 @jdc.pytree_dataclass
 class Params(Generic[P]):
     model: jdc.Static[ModuleType] = jdc.field(default=two_state)
-    neutral_params: jdc.Static[P] = jdc.field(default=two_state.Params())
+    neutral_params: jdc.Static[P] = jdc.field(default_factory=two_state.Params)
 
     field_strength: float = 0.01
     positive_field_contribution_ratio: float = 0.5
