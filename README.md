@@ -23,7 +23,7 @@ A general [Hamiltonian](#hamiltonian) model is also provided that is used under-
 
 1. Install Python
 
-   If you don’t have Python installed, you can download it from the official website: https://www.python.org/downloads/
+   OptiSpec needs Python 3.11 or newer. If you don’t have it installed, you can download it from the official website: https://www.python.org/downloads/
 
 > [!NOTE]
 > Some Python distributions use `python3` instead of `python`.
@@ -344,13 +344,13 @@ diagonalization.eigenvectors # 2d JAX array
 Because this package uses JAX, it comes with a capability for computation on a GPU baked in, which can bring massive speedups. With the virtual environment sourced and a GPU on-machine, you can start using JAX on the GPU with the following terminal command:
 
 ```zsh
-pip install -U "jax[cuda12]"
+pip install -U "optispec[cuda13]"
 ```
 
-This will install the JAX builds necessary to enable to GPU. To switch back to the CPU-only build, run:
+This will install the JAX builds necessary to enable the GPU. CUDA 13 needs a recent NVIDIA driver (580 or newer). With an older driver, use `"optispec[cuda12]"` instead. To switch back to the CPU-only build, run:
 
 ```zsh
-pip install -U jax
+pip uninstall -y jax-cuda13-plugin jax-cuda13-pjrt
 ```
 
 

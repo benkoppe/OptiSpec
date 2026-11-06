@@ -1,27 +1,34 @@
-[tool.poetry]
+[project]
 name = "optispec"
 version = "0.1.1"
 description = "Simulate optical spectra with quantum mechanical models."
-authors = ["benkoppe <koppe@arizona.edu>"]
+authors = [{ name = "benkoppe", email = "koppe@arizona.edu" }]
 readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "jax>=0.4.31",
+    "jaxtyping>=0.2.33",
+    "jax-dataclasses>=1.6.1",
+    "numpy>=2.0.1",
+    "matplotlib>=3.9.2",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-jaxtyping = "^0.2.33"
-jax = "^0.4.31"
-jax-dataclasses = "^1.6.1"
-numpy = "^2.0.1"
-matplotlib = "^3.9.2"
+[project.optional-dependencies]
+cuda12 = ["jax[cuda12]>=0.4.31"]
+cuda13 = ["jax[cuda13]>=0.7.0"]
 
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.2"
-black = "^24.8.0"
+[dependency-groups]
+dev = ["pytest>=8.3.2"]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.9.0,<0.14"]
+build-backend = "uv_build"
 
+[tool.uv]
+conflicts = [[{ extra = "cuda12" }, { extra = "cuda13" }]]
+
+[tool.uv.build-backend]
+module-root = ""
 
 [tool.ruff.lint]
 # ignore forward annotation errors, they get in the way of jaxtyping
